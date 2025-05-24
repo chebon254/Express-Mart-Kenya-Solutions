@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Conditional Cash on Delivery
+ * Plugin Name: ExpressMartKenya Cash on Delivery Condition
  * Description: Enable/disable Cash on Delivery based on cities and product brands
  * Version: 1.0.0
- * Author: Your Name
+ * Author: <a href="https://chebonkelvin.com">Kelvin Chebon</a>
  * Text Domain: conditional-cod
  */
 
