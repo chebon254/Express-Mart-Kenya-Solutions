@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Carousel</title>
+    <style>
+        /* Reset and base styles with unique prefixes */
+        .ytvc-container * {
+            box-sizing: border-box;
+        }
+
+        .ytvc-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ffffff, #ffffff);
+            font-family: "Montserrat", sans-serif;
+            position: relative;
+        }
+
+        /* Brand Gallery Header */
+        .ytvc-brand-title {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* Carousel Styles */
+        .ytvc-carousel {
+            position: relative;
+            width: 23rem;
+            height: 23rem;
+            perspective: 500px;
+            transform-style: preserve-3d;
+        }
+
+        /* Navigation Buttons */
+        .ytvc-nav {
+            color: white;
+            font-size: 5rem;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 50%;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+            background: unset;
+            border: unset;
+            transform: translateY(-50%);
+        }
+
+        .ytvc-nav.ytvc-left {
+            left: -80px;
+        }
+
+        .ytvc-nav.ytvc-right {
+            right: -80px;
+        }
+
+        .ytvc-nav:hover {
+            opacity: 0.7;
+        }
+
+        /* Card Styles */
+        .ytvc-card {
+            width: 100%;
+            height: 100%;
+            padding: 1.5rem;
+            background-color: hsl(280deg, 40%, calc(100% - var(--ytvc-abs-offset) * 50%));
+            border-radius: 1rem;
+            color: #1f2937;
+            text-align: justify;
+            transition: all 0.3s ease-out;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ytvc-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* YouTube Thumbnail */
+        .ytvc-thumbnail {
+            width: 100%;
+            height: 70%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ytvc-play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .ytvc-play-button:hover {
+            transform: scale(1.1);
+            background: rgba(255, 0, 0, 1);
+        }
+
+        /* YouTube iframe embedded in card */
+        .ytvc-video-iframe {
+            width: 100%;
+            height: 70%;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        .ytvc-card-title {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0 0 0.5rem 0;
+            color: #1f2937;
+            flex-shrink: 0;
+        }
+
+        .ytvc-card-content {
+            font-size: 0.8rem;
+            line-height: 1.3;
+            text-align: center;
+            color: #4b5563;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Card Container with 3D positioning */
+        .ytvc-card-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: 
+                rotateY(calc(var(--ytvc-offset) * 50deg)) 
+                scaleY(calc(1 + var(--ytvc-abs-offset) * -0.4))
+                translateZ(calc(var(--ytvc-abs-offset) * -30rem))
+                translateX(calc(var(--ytvc-direction) * -5rem));
+            filter: blur(calc(var(--ytvc-abs-offset) * 1rem));
+            transition: all 0.3s ease-out;
+        }
+
+        /* Active card styling */
+        .ytvc-card-container.ytvc-active {
+            z-index: 1;
+        }
+
+        /* Close button for video */
+        .ytvc-close-video {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .ytvc-close-video:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Hidden class */
+        .ytvc-hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .ytvc-carousel {
+                width: 18rem;
+                height: 18rem;
+            }
+
+            .ytvc-brand-title {
+                font-size: 2rem;
+                top: 20px;
+            }
+
+            .ytvc-nav {
+                font-size: 3rem;
+                left: -60px;
+            }
+
+            .ytvc-nav.ytvc-right {
+                right: -60px;
+            }
+
+            .ytvc-card {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ytvc-carousel {
+                width: 15rem;
+                height: 15rem;
+            }
+
+            .ytvc-brand-title {
+                font-size: 1.5rem;
+            }
+
+            .ytvc-nav {
+                left: -40px;
+            }
+
+            .ytvc-nav.ytvc-right {
+                right: -40px;
+            }
+
+            .ytvc-card {
+                padding: 0.8rem;
+            }
+
+            .ytvc-card-title {
+                font-size: 0.9rem;
+            }
+
+            .ytvc-card-content {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ytvc-container">
+        <h1 class="ytvc-brand-title">Brand Gallery</h1>
+        
+        <div class="ytvc-carousel" id="ytvcCarousel">
+            <!-- Navigation buttons -->
+            <button class="ytvc-nav ytvc-left" onclick="ytvcPrevCard()">‹</button>
+            <button class="ytvc-nav ytvc-right" onclick="ytvcNextCard()">›</button>
+            <iframe src="https://www.youtube.com/watch?v=JUQBoKaKGi0&pp=ygUFaGF2aXQ%3D" width="100%" height="60vh" frameborder="0"></iframe>
+            
+            <!-- Video cards will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        // YouTube Video Data - Add your videos here
+        const YTVC_VIDEOS = [
+            {
+                id: "https://www.youtube.com/watch?v=JUQBoKaKGi0&pp=ygUFaGF2aXQ%3D", // Example video ID
+                title: "Creative Solutions",
+            },
+            {
+                id: "https://www.youtube.com/watch?v=JUQBoKaKGi0&pp=ygUFaGF2aXQ%3D", // Example video ID
+                title: "Creative Solutions",
+            },
+            {
+                id: "https://www.youtube.com/watch?v=JUQBoKaKGi0&pp=ygUFaGF2aXQ%3D", // Example video ID
+                title: "Creative Solutions",
+            },
+            {
+                id: "https://www.youtube.com/watch?v=JUQBoKaKGi0&pp=ygUFaGF2aXQ%3D", // Example video ID
+                title: "Creative Solutions",
+            },
+            {
+                id: "https://www.youtube.com/watch?v=JUQBoKaKGi0&pp=ygUFaGF2aXQ%3D", // Example video ID
+                title: "Creative Solutions",
+            }
+        ];
+
+        const YTVC_MAX_VISIBILITY = 3;
+        let ytvcActive = 1;
+        let ytvcCount = YTVC_VIDEOS.length;
+        let ytvcCurrentlyPlaying = null;
+
+        // Generate YouTube thumbnail URL
+        function ytvcGetThumbnail(videoId) {
+            return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        }
+
+        // Generate YouTube embed URL
+        function ytvcGetEmbedUrl(videoId) {
+            return `${videoId}?autoplay=1&rel=0&showinfo=0`;
+        }
+
+        // Create video cards
+        function ytvcCreateCards() {
+            const carousel = document.getElementById('ytvcCarousel');
+            
+            YTVC_VIDEOS.forEach((video, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'ytvc-card-container';
+                cardContainer.setAttribute('data-index', index);
+                cardContainer.innerHTML = `
+                    <div class="ytvc-card" onclick="ytvcPlayVideo(${index})">
+                        <div class="ytvc-thumbnail" style="background-image: url('${ytvcGetThumbnail(video.id)}')">
+                            <div class="ytvc-play-button">▶</div>
+                        </div>
+                        <iframe class="ytvc-video-iframe ytvc-hidden" 
+                                src="" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                        <button class="ytvc-close-video ytvc-hidden" onclick="ytvcStopVideo(${index}, event)">×</button>
+                        <h2 class="ytvc-card-title">${video.title}</h2>
+                    </div>
+                `;
+                carousel.appendChild(cardContainer);
+            });
+            
+            ytvcUpdateCards();
+        }
+
+        // Update card positions and visibility
+        function ytvcUpdateCards() {
+            const cards = document.querySelectorAll('.ytvc-card-container');
+            
+            cards.forEach((card, index) => {
+                const offset = (ytvcActive - index) / 3;
+                const absOffset = Math.abs(offset);
+                const direction = Math.sign(offset);
+                const opacity = absOffset > YTVC_MAX_VISIBILITY ? "0" : "1";
+                const display = absOffset > YTVC_MAX_VISIBILITY ? "none" : "block";
+                
+                card.style.setProperty('--ytvc-offset', offset);
+                card.style.setProperty('--ytvc-direction', direction);
+                card.style.setProperty('--ytvc-abs-offset', absOffset);
+                card.style.opacity = opacity;
+                card.style.display = display;
+                
+                // Add active class to center card
+                if (index === ytvcActive) {
+                    card.classList.add('ytvc-active');
+                } else {
+                    card.classList.remove('ytvc-active');
+                }
+            });
+        }
+
+        // Play video in card
+        function ytvcPlayVideo(index) {
+            // Stop any currently playing video
+            if (ytvcCurrentlyPlaying !== null && ytvcCurrentlyPlaying !== index) {
+                ytvcStopVideo(ytvcCurrentlyPlaying);
+            }
+            
+            const card = document.querySelector(`[data-index="${index}"] .ytvc-card`);
+            const thumbnail = card.querySelector('.ytvc-thumbnail');
+            const iframe = card.querySelector('.ytvc-video-iframe');
+            const closeBtn = card.querySelector('.ytvc-close-video');
+            
+            // Hide thumbnail and show iframe
+            thumbnail.classList.add('ytvc-hidden');
+            iframe.classList.remove('ytvc-hidden');
+            closeBtn.classList.remove('ytvc-hidden');
+            
+            // Set iframe source to start playing
+            iframe.src = ytvcGetEmbedUrl(YTVC_VIDEOS[index].id);
+            
+            ytvcCurrentlyPlaying = index;
+        }
+
+        // Stop video in card
+        function ytvcStopVideo(index, event) {
+            if (event) {
+                event.stopPropagation(); // Prevent card click
+            }
+            
+            const card = document.querySelector(`[data-index="${index}"] .ytvc-card`);
+            const thumbnail = card.querySelector('.ytvc-thumbnail');
+            const iframe = card.querySelector('.ytvc-video-iframe');
+            const closeBtn = card.querySelector('.ytvc-close-video');
+            
+            // Show thumbnail and hide iframe
+            thumbnail.classList.remove('ytvc-hidden');
+            iframe.classList.add('ytvc-hidden');
+            closeBtn.classList.add('ytvc-hidden');
+            
+            // Clear iframe source to stop video
+            iframe.src = '';
+            
+            if (ytvcCurrentlyPlaying === index) {
+                ytvcCurrentlyPlaying = null;
+            }
+        }
+
+        // Navigation functions
+        function ytvcNextCard() {
+            // Stop any playing video when navigating
+            if (ytvcCurrentlyPlaying !== null) {
+                ytvcStopVideo(ytvcCurrentlyPlaying);
+            }
+            
+            ytvcActive = ytvcActive < ytvcCount - 1 ? ytvcActive + 1 : 0;
+            ytvcUpdateCards();
+        }
+
+        function ytvcPrevCard() {
+            // Stop any playing video when navigating
+            if (ytvcCurrentlyPlaying !== null) {
+                ytvcStopVideo(ytvcCurrentlyPlaying);
+            }
+            
+            ytvcActive = ytvcActive > 0 ? ytvcActive - 1 : ytvcCount - 1;
+            ytvcUpdateCards();
+        }
+
+        // Auto-rotate functionality (optional)
+        function ytvcStartAutoRotate(interval = 5000) {
+            setInterval(() => {
+                // Only auto-rotate if no video is playing
+                if (ytvcCurrentlyPlaying === null) {
+                    ytvcNextCard();
+                }
+            }, interval);
+        }
+
+        // Initialize the carousel
+        document.addEventListener('DOMContentLoaded', function() {
+            ytvcCreateCards();
+            // Uncomment the line below to enable auto-rotation
+            // ytvcStartAutoRotate();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                ytvcPrevCard();
+            } else if (event.key === 'ArrowRight') {
+                ytvcNextCard();
+            } else if (event.key === 'Escape' && ytvcCurrentlyPlaying !== null) {
+                ytvcStopVideo(ytvcCurrentlyPlaying);
+            }
+        });
+    </script>
+</body>
+</html>

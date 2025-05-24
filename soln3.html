@@ -1,0 +1,450 @@
+<style>
+    /* Reset and base styles with unique prefixes */
+    .ytvc-container * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ytvc-container {
+        width: 100%;
+        min-height: 70vh;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        overflow: visible;
+        background: -o-linear-gradient(45deg, #ffffff, #ffffff);
+        background: linear-gradient(45deg, #ffffff, #ffffff);
+        font-family: "Montserrat", sans-serif;
+        position: relative;
+        padding: 60px 20px 40px;
+    }
+
+    /* Brand Gallery Header */
+    .ytvc-brand-title {
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #000000;
+        text-align: center;
+        z-index: 10;
+    }
+
+    /* Carousel Styles - Larger for pixel perfect match */
+    .ytvc-carousel {
+        position: relative;
+        width: 35rem;
+        height: 25rem;
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+    }
+
+    /* Navigation Buttons - Better positioning */
+    .ytvc-nav {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 4rem;
+        position: absolute;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        top: 50%;
+        z-index: 10;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        -webkit-transition: all 0.3s ease;
+        -o-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+    }
+
+    .ytvc-nav.ytvc-left {
+        left: -100px;
+    }
+
+    .ytvc-nav.ytvc-right {
+        right: -100px;
+    }
+
+    .ytvc-nav:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+        color: white;
+        -webkit-transform: translateY(-50%) scale(1.1);
+        -ms-transform: translateY(-50%) scale(1.1);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    /* Card Styles - Wider aspect ratio */
+    .ytvc-card {
+        width: 100%;
+        height: 100%;
+        padding: 0px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        color: #1f2937;
+        -webkit-transition: all 0.3s ease-out;
+        -o-transition: all 0.3s ease-out;
+        transition: all 0.3s ease-out;
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .ytvc-card:hover {
+        -webkit-transform: translateY(-5px);
+        -ms-transform: translateY(-5px);
+        transform: translateY(-5px);
+        -webkit-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* YouTube iframe - Better aspect ratio */
+    .ytvc-video-iframe {
+        width: 100%;
+        height: 80%;
+        border: none;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 0px;
+        margin-bottom: 1rem;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+    }
+
+    .ytvc-card-title {
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 16px 0px;
+        color: #1f2937;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        line-height: 1.3;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        padding: 0 0.5rem;
+    }
+
+    /* Card Container with 3D positioning and BLUR effect - Enhanced */
+    .ytvc-card-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-transform:
+            rotateY(calc(var(--ytvc-offset) * 45deg)) scaleY(calc(1 + var(--ytvc-abs-offset) * -0.3)) translateZ(calc(var(--ytvc-abs-offset) * -35rem)) translateX(calc(var(--ytvc-direction) * -8rem));
+        transform:
+            rotateY(calc(var(--ytvc-offset) * 45deg)) scaleY(calc(1 + var(--ytvc-abs-offset) * -0.3)) translateZ(calc(var(--ytvc-abs-offset) * -35rem)) translateX(calc(var(--ytvc-direction) * -8rem));
+        -webkit-filter: blur(calc(var(--ytvc-abs-offset) * 1.2rem));
+        filter: blur(calc(var(--ytvc-abs-offset) * 1.2rem));
+        -webkit-transition: all 0.4s ease-out;
+        -o-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
+    }
+
+    /* Active card styling */
+    .ytvc-card-container.ytvc-active {
+        z-index: 1;
+    }
+
+    .ytvc-call-to-action {
+        text-align: center;
+    }
+
+    /* Responsive Design - Mobile first approach */
+    @media (max-width: 1200px) {
+        .ytvc-carousel {
+            width: 30rem;
+            height: 22rem;
+        }
+
+        .ytvc-nav.ytvc-left {
+            left: -80px;
+        }
+
+        .ytvc-nav.ytvc-right {
+            right: -80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ytvc-container {
+            padding: 40px 15px 30px;
+        }
+
+        .ytvc-carousel {
+            width: 22rem;
+            height: 18rem;
+        }
+
+        .ytvc-brand-title {
+            font-size: 2rem;
+            top: 20px;
+        }
+
+        .ytvc-nav {
+            font-size: 2.5rem;
+            width: 50px;
+            height: 50px;
+        }
+
+        .ytvc-nav.ytvc-left {
+            left: -60px;
+        }
+
+        .ytvc-nav.ytvc-right {
+            right: -60px;
+        }
+
+        .ytvc-card {
+            padding: 1.5rem;
+        }
+
+        .ytvc-card-title {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .ytvc-carousel {
+            width: 18rem;
+            height: 15rem;
+        }
+
+        .ytvc-brand-title {
+            font-size: 1.5rem;
+        }
+
+        .ytvc-nav {
+            font-size: 2rem;
+            width: 40px;
+            height: 40px;
+        }
+
+        .ytvc-nav.ytvc-left {
+            left: -45px;
+        }
+
+        .ytvc-nav.ytvc-right {
+            right: -45px;
+        }
+
+        .ytvc-card {
+            padding: 1rem;
+        }
+
+        .ytvc-card-title {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .ytvc-carousel {
+            width: 15rem;
+            height: 12rem;
+        }
+
+        .ytvc-nav.ytvc-left {
+            left: -35px;
+        }
+
+        .ytvc-nav.ytvc-right {
+            right: -35px;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <div class="ytvc-container">
+        <h1 class="ytvc-brand-title">Video Reviews</h1>
+
+        <div class="ytvc-carousel" id="ytvcCarousel">
+            <!-- Navigation buttons -->
+            <button class="ytvc-nav ytvc-left" onclick="ytvcPrevCard()">
+                <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9.58794 18.4125C8.80669 17.6313 8.80669 16.3625 9.58794 15.5813L19.5879 5.58126C20.3692 4.80001 21.6379 4.80001 22.4192 5.58126C23.2004 6.36251 23.2004 7.63126 22.4192 8.41251L13.8317 17L22.4129 25.5875C23.1942 26.3688 23.1942 27.6375 22.4129 28.4188C21.6317 29.2 20.3629 29.2 19.5817 28.4188L9.58169 18.4188L9.58794 18.4125Z"
+                        fill="white" fill-opacity="0.7" />
+                </svg>
+            </button>
+            <button class="ytvc-nav ytvc-right" onclick="ytvcNextCard()">
+                <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M25.4125 16.5875C26.1938 17.3688 26.1938 18.6375 25.4125 19.4188L15.4125 29.4188C14.6313 30.2001 13.3625 30.2001 12.5813 29.4188C11.8 28.6376 11.8 27.3688 12.5813 26.5875L21.1688 18L12.5875 9.41255C11.8063 8.6313 11.8063 7.36255 12.5875 6.5813C13.3688 5.80005 14.6375 5.80005 15.4188 6.5813L25.4188 16.5813L25.4125 16.5875Z"
+                        fill="white" fill-opacity="0.7" />
+                </svg>
+            </button>
+
+            <!-- Video cards will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        // YouTube Video Data - You can paste YouTube embed codes here
+        const YTVC_EMBED_CODES = [
+            `<iframe width="1377" height="775" src="https://www.youtube.com/embed/wb_QPU8eEWI" title="HAVIT FUXI H3 Wireless Gaming Headphones" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+            `<iframe width="1377" height="775" src="https://www.youtube.com/embed/6ON_5mpshb0" title="HAVIT H655BT PRO Active Noise Cancelling Bluetooth Headphones" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+            `<iframe width="506" height="899" src="https://www.youtube.com/embed/kLmKcH77IR4" title="Havit M9040S Smart watch" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+        ];
+
+        const YTVC_MAX_VISIBILITY = 3;
+        let ytvcActive = 1;
+        let ytvcCount = YTVC_EMBED_CODES.length;
+        let ytvcVideos = [];
+
+        // Extract video data from embed codes
+        function ytvcProcessEmbedCodes() {
+            ytvcVideos = YTVC_EMBED_CODES.map((embedCode, index) => {
+                // Create a temporary div to parse the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = embedCode;
+                const iframe = tempDiv.querySelector('iframe');
+
+                if (iframe) {
+                    // Extract src and title
+                    const src = iframe.getAttribute('src');
+                    const title = iframe.getAttribute('title') || `Video ${index + 1}`;
+
+                    // Modify iframe attributes for carousel
+                    iframe.removeAttribute('width');
+                    iframe.removeAttribute('height');
+                    iframe.className = 'ytvc-video-iframe';
+
+                    return {
+                        iframe: iframe.outerHTML,
+                        title: title,
+                        src: src
+                    };
+                }
+
+                return {
+                    iframe: embedCode,
+                    title: `Video ${index + 1}`,
+                    src: ''
+                };
+            });
+        }
+
+        // Create video cards
+        function ytvcCreateCards() {
+            const carousel = document.getElementById('ytvcCarousel');
+
+            ytvcVideos.forEach((video, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'ytvc-card-container';
+                cardContainer.setAttribute('data-index', index);
+                cardContainer.innerHTML = `
+                    <div class="ytvc-card">
+                        ${video.iframe}
+                        <h2 class="ytvc-card-title">${video.title}</h2>
+                    </div>
+                `;
+                carousel.appendChild(cardContainer);
+            });
+
+            ytvcUpdateCards();
+        }
+
+        // Update card positions and visibility
+        function ytvcUpdateCards() {
+            const cards = document.querySelectorAll('.ytvc-card-container');
+
+            cards.forEach((card, index) => {
+                const offset = (ytvcActive - index) / 3;
+                const absOffset = Math.abs(offset);
+                const direction = Math.sign(offset);
+                const opacity = absOffset > YTVC_MAX_VISIBILITY ? "0" : "1";
+                const display = absOffset > YTVC_MAX_VISIBILITY ? "none" : "block";
+
+                card.style.setProperty('--ytvc-offset', offset);
+                card.style.setProperty('--ytvc-direction', direction);
+                card.style.setProperty('--ytvc-abs-offset', absOffset);
+                card.style.opacity = opacity;
+                card.style.display = display;
+
+                // Add active class to center card
+                if (index === ytvcActive) {
+                    card.classList.add('ytvc-active');
+                } else {
+                    card.classList.remove('ytvc-active');
+                }
+            });
+        }
+
+        // Navigation functions
+        function ytvcNextCard() {
+            ytvcActive = ytvcActive < ytvcCount - 1 ? ytvcActive + 1 : 0;
+            ytvcUpdateCards();
+        }
+
+        function ytvcPrevCard() {
+            ytvcActive = ytvcActive > 0 ? ytvcActive - 1 : ytvcCount - 1;
+            ytvcUpdateCards();
+        }
+
+        // Auto-rotate functionality (optional)
+        function ytvcStartAutoRotate(interval = 5000) {
+            setInterval(() => {
+                ytvcNextCard();
+            }, interval);
+        }
+
+        // Initialize the carousel
+        document.addEventListener('DOMContentLoaded', function () {
+            ytvcProcessEmbedCodes();
+            ytvcCreateCards();
+            // Uncomment the line below to enable auto-rotation
+            // ytvcStartAutoRotate();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowLeft') {
+                ytvcPrevCard();
+            } else if (event.key === 'ArrowRight') {
+                ytvcNextCard();
+            }
+        });
+    </script>
