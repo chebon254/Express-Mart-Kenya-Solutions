@@ -1,0 +1,176 @@
+/* Pickup Station Checkout Styles */
+.pickup-station-field {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.pickup-station-field h3 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    font-size: 18px;
+    color: #333;
+    border-bottom: 2px solid #0073aa;
+    padding-bottom: 10px;
+}
+
+.pickup-station-dropdown select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.pickup-station-dropdown select:focus {
+    border-color: #0073aa;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 115, 170, 0.3);
+}
+
+.pickup-station-details {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.pickup-station-info {
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #e1e1e1;
+    border-radius: 3px;
+    margin-top: 10px;
+}
+
+.pickup-station-info h4 {
+    margin: 0 0 10px 0;
+    color: #0073aa;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.pickup-station-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.pickup-station-info strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.pickup-error {
+    color: #d94f4f;
+    font-style: italic;
+    padding: 10px;
+    background: #ffeaea;
+    border: 1px solid #d94f4f;
+    border-radius: 3px;
+}
+
+/* Validation styles */
+.woocommerce-invalid .pickup-station-dropdown select {
+    border-color: #d94f4f;
+    box-shadow: 0 0 5px rgba(217, 79, 79, 0.3);
+}
+
+.pickup-station-dropdown.woocommerce-invalid-required-field select {
+    border-color: #d94f4f;
+}
+
+/* Loading state */
+.pickup-station-details p {
+    color: #666;
+    font-style: italic;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .pickup-station-field {
+        margin: 15px 0;
+        padding: 15px;
+    }
+    
+    .pickup-station-field h3 {
+        font-size: 16px;
+    }
+    
+    .pickup-station-info {
+        padding: 12px;
+    }
+    
+    .pickup-station-info h4 {
+        font-size: 15px;
+    }
+    
+    .pickup-station-info p {
+        font-size: 13px;
+    }
+}
+
+/* Integration with WooCommerce checkout styles */
+.woocommerce-checkout .pickup-station-field {
+    clear: both;
+}
+
+.woocommerce form .form-row.pickup-station-dropdown {
+    width: 100%;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .pickup-station-field {
+        background: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+    
+    .pickup-station-field h3 {
+        color: #fff;
+        border-bottom-color: #0096dd;
+    }
+    
+    .pickup-station-dropdown select {
+        background: #333;
+        border-color: #555;
+        color: #fff;
+    }
+    
+    .pickup-station-info {
+        background: #333;
+        border-color: #555;
+        color: #fff;
+    }
+    
+    .pickup-station-info h4 {
+        color: #0096dd;
+    }
+}
+
+/* Accessibility improvements */
+.pickup-station-dropdown select:focus {
+    outline: 2px solid #005177;
+    outline-offset: 2px;
+}
+
+.pickup-station-field label {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Print styles */
+@media print {
+    .pickup-station-field {
+        background: transparent;
+        border: 1px solid #000;
+    }
+    
+    .pickup-station-info {
+        background: transparent;
+        border: 1px solid #000;
+    }
+}
